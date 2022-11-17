@@ -2,14 +2,10 @@ import { useState, useEffect, useContext } from "react";
 import Task from "../components/Task";
 import { v4 as uuidv4 } from 'uuid';
 import { AppContext } from "../context/AppContext";
-import { AuthContext } from "../context/AuthContext";
 
 function ToDo() {
     const { name, img, setName, setImg, unfinishedTasks, setUnfinishedTasks, doneAndDelTasks, setDoneAndDelTasks } = useContext(AppContext)
     const [addTaskText, setAddTaskText] = useState('');
-    //
-    const { isAuthenticated } = useContext(AuthContext)
-    //
     useEffect(() => {
         const userNameFromLocal = window.localStorage.getItem("USER_NAME");
         const userImgFromLocal = window.localStorage.getItem("USER_IMG");
@@ -51,9 +47,6 @@ function ToDo() {
     }
     return (
         <section className=''>
-            <button className="bg-red-800" onClick={() => {
-                console.log(isAuthenticated);
-            }}>click</button>
             <header className='bg-black flex justify-between items-center py-6 px-4 sm:px-[28px] mb-10'>
                 <h1 className='text-white text-xl sm400:text-[36px] font-black'>TO DO</h1>
 

@@ -6,9 +6,8 @@ import { AuthContext } from "../context/AuthContext";
 
 function GuestGuard({ children }) {
     const { isAuthenticated } = useContext(AuthContext)
-    console.log("inside guestguard", isAuthenticated);
     if (isAuthenticated) {
-        return <Navigate to={ROUTES.TODO} />
+        return <Navigate to={`/${ROUTES.TODO}`} />
     }
     return <>{children}</>
 }

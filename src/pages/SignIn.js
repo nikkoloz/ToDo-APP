@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext"
 
 function SignIn() {
     const { name, setName, img, setImg } = useContext(AppContext)
-    const { setIsAuthenticated, isAuthenticated } = useContext(AuthContext)
+    const { setIsAuthenticated } = useContext(AuthContext)
     const navigate = useNavigate();
     const uploadFileInput = useRef(null);
 
@@ -30,11 +30,10 @@ function SignIn() {
 
     const signInButton = () => {
         if (isUploaded() && name.length >= 4) {
-            window.localStorage.setItem("USER_IMG", JSON.stringify(img))
-            window.localStorage.setItem("USER_NAME", JSON.stringify(name))
-            window.localStorage.setItem("IS_AUTHENTICATED", JSON.stringify(true))
+            localStorage.setItem("USER_IMG", JSON.stringify(img))
+            localStorage.setItem("USER_NAME", JSON.stringify(name))
+            localStorage.setItem("IS_AUTHENTICATED", "1")
             setIsAuthenticated(true);
-
             navigate(`/${ROUTES.TODO}`);
         } else {
             alert("INFO!")
@@ -43,9 +42,6 @@ function SignIn() {
 
     return (
         <section className='sm:bg-black text-center  sm:pt-8 pb-10'>
-            <button className="bg-red-800" onClick={() => {
-                console.log(isAuthenticated);
-            }}>click</button>
             <main className='bg-white max-w-xl mx-auto pt-8 sm:rounded px-8 pb-8 sm:px-10'>
                 <h1 className='font-semibold text-[40px] sm:text-[48px] mb-6 sm:mb-10'>Get Started</h1>
                 {!isUploaded() ? <span className='text-[22px] block mb-2'>add a photo</span> : ''}

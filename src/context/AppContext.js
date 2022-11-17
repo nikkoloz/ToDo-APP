@@ -11,14 +11,7 @@ function AppContextProvider({ children }) {
         done: 0,
         deleted: 0
     })
-    // const userNameForRefreshing = window.localStorage.getItem("USER_NAME")
-    // const userIMGForRefreshing = window.localStorage.getItem("USER_IMG")
-    // console.log(userNameForRefreshing);
-    // console.log(userIMGForRefreshing);
-    // useEffect(() => {
-    //     // setName(userNameForRefreshing)
-    //     // setImg(userIMGForRefreshing)
-    // }, [])
+
     return (
         <AppContext.Provider value={{ name, setName, img, setImg, unfinishedTasks, setUnfinishedTasks, doneAndDelTasks, setDoneAndDelTasks }}>
             {children}
