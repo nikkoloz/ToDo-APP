@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.gg {
-  margin-top: 50px;
+section {
+    font-family: 'Poppins';
 }
