@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { AppContext } from "../context/AppContext";
 import { AuthContext } from "../context/AuthContext"
 import defaultsToLocalStorage from "../functions/defaultsToLocalStorage";
+
 function ToDo() {
     const { name, img, setName, setImg, unfinishedTasks, setUnfinishedTasks, doneAndDelTasks, setDoneAndDelTasks } = useContext(AppContext)
     const { setIsAuthenticated } = useContext(AuthContext)

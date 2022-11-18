@@ -63,16 +63,18 @@ function SignIn() {
                     </button>
                 }
                 <span className='text-[22px] block mt-6 sm:mt-12 mb-4'>fill in you name</span>
-                <input
-                    placeholder='your name'
-                    className='bg-main-gray w-full h-[76px] px-6'
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                ></input>
-                <button
-                    onClick={signInButton}
-                    className='bg-main-green hover:bg-black hover:text-white text-[32px] block mx-auto  px-16 sm:px-20 mt-8 mb-4 sm:mt-16 rounded'
-                >Sign In</button>
+                <form onSubmit={signInButton}>
+                    <input
+                        placeholder='your name'
+                        className='bg-main-gray w-full h-[76px] px-6'
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    ></input>
+                    <button
+                        type="submit"
+                        className='bg-main-green hover:bg-black hover:text-white text-[32px] block mx-auto  px-16 sm:px-20 mt-8 mb-4 sm:mt-16 rounded'
+                    >Sign In</button>
+                </form>
             </main>
         </section>
     );
