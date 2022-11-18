@@ -2,21 +2,29 @@ import { useState, useEffect, useContext } from "react";
 import Task from "../components/Task";
 import { v4 as uuidv4 } from 'uuid';
 import { AppContext } from "../context/AppContext";
-
+import { AuthContext } from "../context/AuthContext"
+import defaultsToLocalStorage from "../functions/defaultsToLocalStorage";
 function ToDo() {
     const { name, img, setName, setImg, unfinishedTasks, setUnfinishedTasks, doneAndDelTasks, setDoneAndDelTasks } = useContext(AppContext)
+    const { setIsAuthenticated } = useContext(AuthContext)
     const [addTaskText, setAddTaskText] = useState('');
     useEffect(() => {
-        const userNameFromLocal = window.localStorage.getItem("USER_NAME");
-        const userImgFromLocal = window.localStorage.getItem("USER_IMG");
-        const DoneAndDelTasksNum = window.localStorage.getItem("DONE_AND_DELETED_TASKS");
-        const TaskNames = window.localStorage.getItem("TASKS");
+        const userNameFromLocal = localStorage.getItem("USER_NAME");
+        const userImgFromLocal = localStorage.getItem("USER_IMG");
+        const DoneAndDelTasksNum = localStorage.getItem("DONE_AND_DELETED_TASKS");
+        const TaskNames = localStorage.getItem("TASKS");
         setDoneAndDelTasks(JSON.parse(DoneAndDelTasksNum))
         setUnfinishedTasks(JSON.parse(TaskNames))
         setName(JSON.parse(userNameFromLocal))
         setImg(JSON.parse(userImgFromLocal))
     }, [])
 
+    const logout = () => {
+        defaultsToLocalStorage();
+        setIsAuthenticated(false)
+        setImg([]);
+        setName('');
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -25,7 +33,7 @@ function ToDo() {
         } else {
             setUnfinishedTasks(prev => {
                 const newTasks = [...prev, addTaskText];
-                window.localStorage.setItem("TASKS", JSON.stringify(newTasks))
+                localStorage.setItem("TASKS", JSON.stringify(newTasks))
                 return newTasks
             });
         }
@@ -35,27 +43,27 @@ function ToDo() {
     const clearTask = (key, taskName) => {
         setDoneAndDelTasks(prev => {
             const newNumbersOfDoneAndDeletedTasks = { ...prev, [key]: prev[key] + 1 }
-            window.localStorage.setItem("DONE_AND_DELETED_TASKS", JSON.stringify(newNumbersOfDoneAndDeletedTasks))
+            localStorage.setItem("DONE_AND_DELETED_TASKS", JSON.stringify(newNumbersOfDoneAndDeletedTasks))
             return newNumbersOfDoneAndDeletedTasks
         })
 
         setUnfinishedTasks(() => {
             const newTasks = unfinishedTasks.filter((task) => task !== taskName)
-            window.localStorage.setItem("TASKS", JSON.stringify(newTasks))
+            localStorage.setItem("TASKS", JSON.stringify(newTasks))
             return newTasks
         })
     }
     return (
         <section className=''>
-            <header className='bg-black flex justify-between items-center py-6 px-4 sm:px-[28px] mb-10'>
-                <h1 className='text-white text-xl sm400:text-[36px] font-black'>TO DO</h1>
-
-                <div className='flex items-center'>
-                    <span className='text-white text-sm sm400:text-lg'>{name}</span>
-                    <button className='ml-2 sm:ml-4'>
-                        <img alt='img' src={img} className='w-[68px] h-[68px] rounded-full' />
-                    </button>
+            <header className='bg-black mb-10'>
+                <div className="flex justify-between items-center pt-6 px-4 sm:px-[28px]">
+                    <h1 className='text-white text-xl sm400:text-[36px] font-black'>TO DO</h1>
+                    <div className='flex items-center'>
+                        <span className='text-white text-sm sm400:text-lg'>{name}</span>
+                        <img alt='img' src={img} className='w-[68px] h-[68px] rounded-full ml-2 sm:ml-4' />
+                    </div>
                 </div>
+                <button onClick={logout} className="text-red-500 ml-auto mr-8 py-2 block"> Log Out</button>
             </header>
             <main className='text-center px-4'>
                 <div>
@@ -68,7 +76,7 @@ function ToDo() {
                         className="text-white text-sm block mx-auto hover:text-main-green"
                         onClick={() => {
                             setDoneAndDelTasks(prev => ({ done: 0, deleted: 0 }))
-                            window.localStorage.setItem("DONE_AND_DELETED_TASKS", JSON.stringify({ done: 0, deleted: 0 }))
+                            localStorage.setItem("DONE_AND_DELETED_TASKS", JSON.stringify({ done: 0, deleted: 0 }))
                         }}
                     >New Day</button>
                 </div>

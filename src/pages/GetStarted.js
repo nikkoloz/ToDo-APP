@@ -3,17 +3,13 @@ import ROUTES from "../config/ROUTES";
 import ToDo from "../img/ToDo.png"
 import { useContext, useEffect } from "react";
 import { AppContext } from "../context/AppContext"
+import defaultsToLocalStorage from "../functions/defaultsToLocalStorage";
 
 function GetStarted() {
-    const { name, img, unfinishedTasks, doneAndDelTasks } = useContext(AppContext)
 
     useEffect(() => {
         if (localStorage.getItem("IS_AUTHENTICATED") !== "1") {
-            localStorage.setItem("USER_NAME", JSON.stringify(name))
-            localStorage.setItem("USER_IMG", JSON.stringify(img))
-            localStorage.setItem("TASKS", JSON.stringify(unfinishedTasks));
-            localStorage.setItem("DONE_AND_DELETED_TASKS", JSON.stringify(doneAndDelTasks));
-            localStorage.setItem("IS_AUTHENTICATED", '0');
+            defaultsToLocalStorage()
         }
     }, [])
 
