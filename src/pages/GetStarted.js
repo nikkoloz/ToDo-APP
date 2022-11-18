@@ -1,8 +1,7 @@
-import { json, Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ROUTES from "../config/ROUTES";
 import ToDo from "../img/ToDo.png"
-import { useContext, useEffect } from "react";
-import { AppContext } from "../context/AppContext"
+import { useEffect } from "react";
 import defaultsToLocalStorage from "../functions/defaultsToLocalStorage";
 
 function GetStarted() {
