@@ -6,7 +6,6 @@ import { AppContext } from "../context/AppContext"
 import defaultsToLocalStorage from "../functions/defaultsToLocalStorage";
 
 function GetStarted() {
-
     useEffect(() => {
         if (localStorage.getItem("IS_AUTHENTICATED") !== "1") {
             defaultsToLocalStorage()
