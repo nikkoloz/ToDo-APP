@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom"
 import ROUTES from "../config/ROUTES"
 import { AppContext } from "../context/AppContext"
 import { AuthContext } from "../context/AuthContext"
+import ErrorBox from "../components/ErrorBox"
 
 function SignIn() {
-    const { name, setName, img, setImg } = useContext(AppContext)
+    const { name, setName, img, setImg, error, setError } = useContext(AppContext)
     const { setIsAuthenticated } = useContext(AuthContext)
     const navigate = useNavigate();
     const uploadFileInput = useRef(null);
@@ -28,20 +29,23 @@ function SignIn() {
         return true
     }
 
-    const signInButton = () => {
+    const signInButton = (e) => {
+        e.preventDefault()
         if (isUploaded() && name.length >= 4) {
+            setError({ status: false, message: "" })
             localStorage.setItem("USER_IMG", JSON.stringify(img))
             localStorage.setItem("USER_NAME", JSON.stringify(name))
             localStorage.setItem("IS_AUTHENTICATED", "1")
             setIsAuthenticated(true);
             navigate(`/${ROUTES.TODO}`);
-        } else {
-            alert("INFO!")
         }
+        else if (!isUploaded()) setError({ status: true, message: "Upload image!" })
+        else if (name.length < 4) setError({ status: true, message: "Username must be at least 4 characters!" })
     }
 
+
     return (
-        <section className='sm:bg-black text-center  sm:pt-8 pb-10'>
+        <section className='sm:bg-black text-center min-h-screen  sm:pt-8 pb-10'>
             <main className='bg-white max-w-xl mx-auto pt-8 sm:rounded px-8 pb-8 sm:px-10'>
                 <h1 className='font-semibold text-[40px] sm:text-[48px] mb-6 sm:mb-10'>Get Started</h1>
                 {!isUploaded() ? <span className='text-[22px] block mb-2'>add a photo</span> : ''}
@@ -63,20 +67,24 @@ function SignIn() {
                     </button>
                 }
                 <span className='text-[22px] block mt-6 sm:mt-12 mb-4'>fill in you name</span>
-                <form onSubmit={signInButton}>
+                <form onSubmit={signInButton} className="relative">
                     <input
                         placeholder='your name'
                         className='bg-main-gray w-full h-[76px] px-6'
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e) => {
+                            setError({ status: false, message: "" })
+                            setName(e.target.value)
+                        }}
                     ></input>
+                    {error.status && <ErrorBox message={error.message} />}
                     <button
                         type="submit"
-                        className='bg-main-green hover:bg-black hover:text-white text-[32px] block mx-auto  px-16 sm:px-20 mt-8 mb-4 sm:mt-16 rounded'
+                        className={`bg-main-green hover:bg-black hover:text-white rounded text-[32px] block mx-auto px-16 sm:px-20 mb-4 ${error.status ? "sm:mt-8 " : "mt-8 sm:mt-16"}  `}
                     >Sign In</button>
                 </form>
             </main>
-        </section>
+        </section >
     );
 }
 

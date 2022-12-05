@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { AppContext } from "../context/AppContext";
 import { AuthContext } from "../context/AuthContext"
 import defaultsToLocalStorage from "../functions/defaultsToLocalStorage";
-
+import ErrorBox from "../components/ErrorBox";
 function ToDo() {
-    const { name, img, setName, setImg, unfinishedTasks, setUnfinishedTasks, doneAndDelTasks, setDoneAndDelTasks } = useContext(AppContext)
+    const { name, img, setName, setImg, unfinishedTasks, setUnfinishedTasks, doneAndDelTasks, setDoneAndDelTasks, error, setError } = useContext(AppContext)
     const { setIsAuthenticated } = useContext(AuthContext)
     const [addTaskText, setAddTaskText] = useState('');
     useEffect(() => {
@@ -30,7 +30,7 @@ function ToDo() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (unfinishedTasks.some(task => task === addTaskText) || addTaskText.length === 0) {
-            alert('NOPE!')
+            setError({ status: true, message: "Input is empty" })
         } else {
             setUnfinishedTasks(prev => {
                 const newTasks = [...prev, addTaskText];
@@ -55,7 +55,7 @@ function ToDo() {
         })
     }
     return (
-        <section className=''>
+        <section className='min-h-screen'>
             <header className='bg-black mb-10'>
                 <div className="flex justify-between items-center pt-6 px-4 sm:px-[28px]">
                     <h1 className='text-white text-xl sm400:text-[36px] font-black'>TO DO</h1>
@@ -83,14 +83,18 @@ function ToDo() {
                 </div>
                 <h1 className='text-2xl sm400:text-[35px] sm:text-[42px] font-semibold mb-6'>Add Your Daily Tasks</h1>
                 <div className='sm:w-595 mx-auto'>
-                    <form className='w-full mb-10 flex ' onSubmit={handleSubmit}>
+                    <form className='w-full mb-10 flex relative' onSubmit={handleSubmit}>
                         <input
                             className='bg-main-gray rounded-l w-full inline-block py-2 px-6'
                             placeholder='my task'
                             value={addTaskText}
-                            onChange={(e) => setAddTaskText(e.target.value)}
+                            onChange={(e) => {
+                                setError({ status: false, message: "" })
+                                setAddTaskText(e.target.value)
+                            }}
                         ></input>
                         <button type="submit" className='bg-main-green hover:bg-black hover:text-white rounded-r p-2 sm400:p-4 text-xl sm400:text-[32px]'>Add</button>
+                        {error.status && <div className={`absolute right-1/2 translate-x-1/2 top-11 sm400:top-14  `}><ErrorBox message={error.message} /></div>}
                     </form>
                     <div>
                         {unfinishedTasks.map((task) => <Task taskName={task} key={uuidv4()} clearTask={clearTask} />)}
